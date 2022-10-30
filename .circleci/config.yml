@@ -28,7 +28,7 @@ jobs:
             docker tag udagram-api-user omar00101/udagram-api-user:v4
             
             docker build -t udagram-frontend ./udagram-frontend
-            docker tag udagram-frontend omar00101/udagram-frontend:v4
+            docker tag udagram-frontend omar00101/udagram-frontend:v5
 
             docker build -t udagram-reverseproxy ./udagram-reverseproxy
             docker tag udagram-reverseproxy omar00101/udagram-reverseproxy:v4
@@ -41,7 +41,7 @@ jobs:
             echo "-------------- Pushing images to dockerhub-------"
             docker push omar00101/udagram-api-feed:v4
             docker push omar00101/udagram-api-user:v4
-            docker push omar00101/udagram-frontend:v4
+            docker push omar00101/udagram-frontend:v5
             docker push omar00101/udagram-reverseproxy:v4
 workflows:
   default:
