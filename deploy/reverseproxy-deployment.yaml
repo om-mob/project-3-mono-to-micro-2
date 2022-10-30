@@ -2,23 +2,28 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: reverseproxy
+  labels:
+    app: reverseproxy
 spec:
+  replicas: 2
   selector:
     matchLabels:
-      run: reverseproxy
-  replicas: 2
+      app: reverseproxy
   template:
     metadata:
       labels:
-        run: reverseproxy
+        app: reverseproxy
     spec:
       containers:
-      - name: reverseproxy
-        image: docker.io/omar00101/udagram-reverseproxy:v4
-        ports:
-        - containerPort: 80
-        resources:
-          limits:
-            cpu: 500m
-          requests:
-            cpu: 250m
+        - image: docker.io/omar00101/udagram-reverseproxy:v5
+          name: reverseproxy
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"

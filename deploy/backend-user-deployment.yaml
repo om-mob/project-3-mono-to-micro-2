@@ -1,24 +1,84 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  labels:
+    app: backend-user
   name: backend-user
 spec:
+  replicas: 2
   selector:
     matchLabels:
-      run: backend-user
-  replicas: 2
+      app: backend-user
   template:
     metadata:
       labels:
-        run: backend-user
+        app: backend-user
     spec:
       containers:
-      - name: backend-user
-        image: docker.io/omar00101/udagram-api-user:v4
-        ports:
-        - containerPort: 80
-        resources:
-          limits:
-            cpu: 500m
-          requests:
-            cpu: 250m
+        - image: docker.io/omar00101/udagram-api-user:v5
+          name: backend-user
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "1024Mi"
+              cpu: "500m"
+          env:
+            - name: POSTGRES_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: env-secret
+                  key: POSTGRES_USERNAME
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: env-secret
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: env-configmap
+                  key: POSTGRES_HOST
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: env-configmap
+                  key: POSTGRES_DB
+            - name: AWS_BUCKET
+              valueFrom:
+                configMapKeyRef:
+                  name: env-configmap
+                  key: AWS_BUCKET
+            - name: AWS_PROFILE
+              valueFrom:
+                configMapKeyRef:
+                  name: env-configmap
+                  key: AWS_PROFILE
+            - name: AWS_REGION
+              valueFrom:
+                configMapKeyRef:
+                  name: env-configmap
+                  key: AWS_REGION
+            - name: JWT_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  name: env-configmap
+                  key: JWT_SECRET
+            - name: URL
+              valueFrom:
+                configMapKeyRef:
+                  name: env-configmap
+                  key: URL
+          volumeMounts:
+            - name: aws-secret
+              mountPath: "/root/.aws/"
+              readOnly: true
+      volumes:
+        - name: aws-secret
+          secret:
+            secretName: aws-secret
+            optional: false

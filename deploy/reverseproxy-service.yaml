@@ -1,13 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  labels:
-    service: reverseproxy
   name: reverseproxy
+  labels:
+    app: reverseproxy
 spec:
-  ports:
-  - name: "8080"
-    port: 8080
-    targetPort: 8080
+  type: ClusterIP
   selector:
-    service: reverseproxy
+    app: reverseproxy
+  ports:
+    - protocol: TCP
+      name: "8080"
+      port: 8080
+      targetPort: 8080
