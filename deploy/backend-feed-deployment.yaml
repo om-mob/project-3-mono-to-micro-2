@@ -22,10 +22,10 @@ spec:
         imagePullPolicy: Always
         resources:
           requests:
-            memory: "64Mi"
+            memory: "2048Mi"
             cpu: "250m"
           limits:
-            memory: "1024Mi"
+            memory: "4096Mi"
             cpu: "500m"
         env:
           - name: POSTGRES_USERNAME
@@ -75,10 +75,25 @@ spec:
                 key: URL
         volumeMounts:
           - name: aws-secret
-            mountPath: "/root/.aws"
+            mountPath: "~/.aws"
             readOnly: true
       volumes:
         - name: aws-secret
           secret:
             secretName: aws-secret
             optional: false
+
+
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hpa-backend-feed
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: backend-feed
+  minReplicas: 1
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 70
