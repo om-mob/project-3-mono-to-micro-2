@@ -1,5 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
+
 metadata:
   labels:
     app: backend-feed
@@ -15,68 +16,68 @@ spec:
         run: backend-feed
     spec:
       containers:
-      - name: backend-feed
-        image: docker.io/omar00101/udagram-api-feed:v5
-        ports:
-          - containerPort: 8080
-        imagePullPolicy: Always
-        resources:
-          requests:
-            memory: "2048Mi"
-            cpu: "250m"
-          limits:
-            memory: "4096Mi"
-            cpu: "500m"
-        env:
-          - name: POSTGRES_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: env-secret
-                key: POSTGRES_USERNAME
-          - name: POSTGRES_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: env-secret
-                key: POSTGRES_PASSWORD
-          - name: POSTGRES_HOST
-            valueFrom:
-              configMapKeyRef:
-                name: env-configmap
-                key: POSTGRES_HOST
-          - name: POSTGRES_DB
-            valueFrom:
-              configMapKeyRef:
-                name: env-configmap
-                key: POSTGRES_DB
-          - name: AWS_BUCKET
-            valueFrom:
-              configMapKeyRef:
-                name: env-configmap
-                key: AWS_BUCKET
-          - name: AWS_PROFILE
-            valueFrom:
-              configMapKeyRef:
-                name: env-configmap
-                key: AWS_PROFILE
-          - name: AWS_REGION
-            valueFrom:
-              configMapKeyRef:
-                name: env-configmap
-                key: AWS_REGION
-          - name: JWT_SECRET
-            valueFrom:
-              configMapKeyRef:
-                name: env-configmap
-                key: JWT_SECRET
-          - name: URL
-            valueFrom:
-              configMapKeyRef:
-                name: env-configmap
-                key: URL
-        volumeMounts:
-          - name: aws-secret
-            mountPath: "~/.aws"
-            readOnly: true
+        - name: backend-feed
+          image: docker.io/omar00101/udagram-api-feed:v5
+          # ports:
+          #   - containerPort: 8080
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "2048Mi"
+              cpu: "250m"
+            limits:
+              memory: "4096Mi"
+              cpu: "500m"
+          env:
+            - name: POSTGRES_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: env-secret
+                  key: POSTGRES_USERNAME
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: env-secret
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: env-configmap
+                  key: POSTGRES_HOST
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: env-configmap
+                  key: POSTGRES_DB
+            - name: AWS_BUCKET
+              valueFrom:
+                configMapKeyRef:
+                  name: env-configmap
+                  key: AWS_BUCKET
+            - name: AWS_PROFILE
+              valueFrom:
+                configMapKeyRef:
+                  name: env-configmap
+                  key: AWS_PROFILE
+            - name: AWS_REGION
+              valueFrom:
+                configMapKeyRef:
+                  name: env-configmap
+                  key: AWS_REGION
+            - name: JWT_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  name: env-configmap
+                  key: JWT_SECRET
+            - name: URL
+              valueFrom:
+                configMapKeyRef:
+                  name: env-configmap
+                  key: URL
+          volumeMounts:
+            - name: aws-secret
+              mountPath: "$HOME/.aws"
+              readOnly: true
       volumes:
         - name: aws-secret
           secret:
@@ -84,16 +85,16 @@ spec:
             optional: false
 
 
----
-apiVersion: autoscaling/v1
-kind: HorizontalPodAutoscaler
-metadata:
-  name: hpa-backend-feed
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: backend-feed
-  minReplicas: 1
-  maxReplicas: 2
-  targetCPUUtilizationPercentage: 70
+# ---
+# apiVersion: autoscaling/v1
+# kind: HorizontalPodAutoscaler
+# metadata:
+#   name: hpa-backend-feed
+# spec:
+#   scaleTargetRef:
+#     apiVersion: apps/v1
+#     kind: Deployment
+#     name: backend-feed
+#   minReplicas: 1
+#   maxReplicas: 2
+#   targetCPUUtilizationPercentage: 70

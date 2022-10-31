@@ -1,13 +1,28 @@
 apiVersion: v1
 kind: Service
 metadata:
+  name: backend-feed
   labels:
     app: backend-feed
-  name: backend-feed
 spec:
+  type: ClusterIP
   ports:
-  - name: "8080"
-    port: 8080
-    targetPort: 8080
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
   selector:
-    service: backend-feed
+    app: backend-feed
+
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hpa-backend-feed
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: backend-feed
+  minReplicas: 2
+  maxReplicas: 9
+  targetCPUUtilizationPercentage: 50
