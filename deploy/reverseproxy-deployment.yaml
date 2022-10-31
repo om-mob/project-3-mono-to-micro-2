@@ -8,11 +8,11 @@ spec:
   replicas: 2
   selector:
     matchLabels:
-      app: reverseproxy
+      run: reverseproxy
   template:
     metadata:
       labels:
-        app: reverseproxy
+        run: reverseproxy
     spec:
       containers:
         - image: docker.io/omar00101/udagram-reverseproxy:v5

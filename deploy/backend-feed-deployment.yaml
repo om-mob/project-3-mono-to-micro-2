@@ -7,12 +7,12 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: backend-feed
+      run: backend-feed
   replicas: 2
   template:
     metadata:
       labels:
-        app: backend-feed
+        run: backend-feed
     spec:
       containers:
       - name: backend-feed
@@ -75,7 +75,7 @@ spec:
                 key: URL
         volumeMounts:
           - name: aws-secret
-            mountPath: "/root/.aws/"
+            mountPath: "/root/.aws"
             readOnly: true
       volumes:
         - name: aws-secret
