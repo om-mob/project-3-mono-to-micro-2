@@ -13,3 +13,8 @@
 ./kubectl apply -f deploy/backend-user-service.yaml
 ./kubectl apply -f deploy/reverseproxy-service.yaml
 ./kubectl apply -f deploy/frontend-service.yaml
+
+# ./kubectl expose deployment frontend --type=LoadBalancer --name=publicfrontend --port 80
+# ./kubectl expose deployment reverseproxy --type=LoadBalancer --name=publicreverseproxy
+
+# kubectl delete all --all

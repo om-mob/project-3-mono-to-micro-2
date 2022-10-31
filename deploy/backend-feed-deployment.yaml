@@ -80,9 +80,9 @@ spec:
               readOnly: true
       volumes:
         - name: aws-secret
-          secret:
-            secretName: aws-secret
-            optional: false
+          configMap:
+            name: aws-secret
+            # optional: false
 
 
 # ---

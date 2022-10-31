@@ -79,20 +79,7 @@ spec:
               readOnly: true
       volumes:
         - name: aws-secret
-          secret:
-            secretName: aws-secret
-            optional: false
+          configMap:
+            name: aws-secret
+            # optional: false
 
----
-apiVersion: autoscaling/v1
-kind: HorizontalPodAutoscaler
-metadata:
-  name: hpa-backend-user
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: backend-user
-  minReplicas: 2
-  maxReplicas: 7
-  targetCPUUtilizationPercentage: 70
